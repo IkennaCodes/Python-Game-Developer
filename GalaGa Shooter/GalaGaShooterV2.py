@@ -4,6 +4,9 @@ TITLE = "GalaGa Shooter"
 HEIGHT = 480
 WIDTH = 500
 
+score = 0
+gameOver = False
+
 ship = Actor("ship.png")
 bullet = Actor("bullet.png")
 ship.x = 250
@@ -32,16 +35,23 @@ def draw():
 
     for b in bullets:   
         b.draw()  
+    
+    screen.draw.text("score = " + str(score), (25,25), color = "yellow")
+
+    if gameOver:
+        screen.fill("red")
+        screen.draw.text("Game Over!", (250,250), color = "white", fontsize = 50)
 
 
 def update():
-    global bullets
+    global bullets, score, gameOver, bugs
     #movements of the ship
-    if keyboard.left:
+    if keyboard.a:
         ship.x = ship.x - 5
 
-    if keyboard.right:
+    if keyboard.d:
         ship.x = ship.x + 5
+
 
     #make the bullets go up continuously
     for i in bullets:
@@ -53,9 +63,15 @@ def update():
             if b.colliderect(a):
                 bugs.remove(a)
                 bullets.remove(b)
+                score += 1
+
+    for a in bugs:
+        if ship.colliderect(a):
+            gameOver = True
+    
 
 def on_key_down(key):
-    global bullets
+    global bullets, bugs, gameOver
     if key == keys.SPACE:
         #create the bullet when space key is pressed
         bullet = Actor("bullet.png")
