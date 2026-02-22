@@ -18,9 +18,6 @@ def draw():
 
 def update():
     global squareheight, squarecolor, squarewidth, squarex, squarey
-   
-    if (squarex < 0) or (squarey < 0):
-        reset()
 
     if keyboard.a:
         squarex -= 5
@@ -31,34 +28,35 @@ def update():
     if keyboard.s:
         squarey += 5
 
+    # Change colour and size depending on position
     if squarex < 10:
         squarecolor = "red"
-        squareheight = 10
-        squarewidth = 10
+        squarewidth = squareheight = 10
     elif squarex > 350:
         squarecolor = "yellow"
-        squareheight = 100
-        squarewidth = 100
+        squarewidth = squareheight = 100
     elif squarey < 10:
         squarecolor = "blue"
-        squareheight = 150
-        squarewidth = 150
+        squarewidth = squareheight = 150
     elif squarey > 350:
         squarecolor = "orange"
-        squareheight = 300
-        squarewidth = 300
+        squarewidth = squareheight = 300
     else:
-        squarecolor =  "white"
-        squareheight = 50
-        squarewidth = 50
+        squarecolor = "white"
+        squarewidth = squareheight = 50
 
-def reset():
-    squarex = 200
-    squarey = 200
-    squarewidth = 50
-    squareheight = 50
-    squarecolor = "white"
-    screen.draw.filled_rect(Rect((squarex,squarey),(squarewidth, squareheight)), squarecolor)
-    
+    # Bounce left and right
+    if squarex <= 0:
+        squarex = 0
+
+    if squarex + squarewidth >= WIDTH:
+        squarex = WIDTH - squarewidth
+
+    # Bounce top and bottom and if bottom of the square has gone past the bottom of the screen fix it
+    if squarey <= 0:
+        squarey = 0
+
+    if squarey + squareheight >= HEIGHT:
+        squarey = HEIGHT - squareheight
 
 pgzrun.go()
